@@ -1,8 +1,9 @@
 #pragma once
 #include "Engine/DataTable.h"
 #include "GameplayTagContainer.h"
-#include "CardStructs.generated.h"
+#include <CardGame/AttributeSets/AttributeSet_Card.h>
 
+#include "CardStructs.generated.h"
 
 UENUM(BlueprintType)
 enum ERarity : uint8
@@ -14,34 +15,66 @@ enum ERarity : uint8
 	Legendary UMETA(DisplayName = "Legendary"),
 	Mythic UMETA(DisplayName = "Mythic")
 };
+UENUM(BlueprintType)
+enum EFamily : uint8
+{
+	Troll UMETA(DisplayName = "Troll"),
+	Shade UMETA(DisplayName = "Shade"),
+	Golem UMETA(DisplayName = "Golem"),
+	Arrakoa UMETA(DisplayName = "Arrakoa")
+};
 
+USTRUCT(BlueprintType)
+struct FCardStats
+{
+	GENERATED_BODY()
+	FCardStats() {
+		CurrentCost = InitialCost;
+		CurrentAttack = InitialAttack;
+		CurrentHealth = InitialHealth;
+		CurrentTags = InitialTags;
+	}
+public:
+	UPROPERTY(EditDefaultsOnly)
+	int InitialCost;
+	UPROPERTY(EditInstanceOnly)
+	int CurrentCost;
+	UPROPERTY(EditDefaultsOnly)
+	int InitialAttack;
+	UPROPERTY(EditInstanceOnly)
+	int CurrentAttack;
+	UPROPERTY(EditDefaultsOnly)
+	int InitialHealth;
+	UPROPERTY(EditInstanceOnly)
+	int CurrentHealth;
+	UPROPERTY(EditDefaultsOnly)
+	FGameplayTagContainer InitialTags;
+	UPROPERTY(EditInstanceOnly)
+	FGameplayTagContainer CurrentTags;
+
+};
 USTRUCT(BlueprintType)
 struct FCardData : public FTableRowBase
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UTexture2D> CardImage;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FString Id;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UMaterial> CardImage;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FText Name;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FText Description;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FText Flavor;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TEnumAsByte<ERarity> Rarity;
-	UPROPERTY(EditAnywhere)
-	int32 Cost;
-
-	UPROPERTY(EditAnywhere)
-	int32 Health;
-
-	UPROPERTY(EditAnywhere)
-	int32 Attack;
-
-	UPROPERTY(EditAnywhere)
-	FGameplayTagContainer Tags;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TEnumAsByte<EFamily> Family;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FCardStats Stats;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	bool Available = true;
 };

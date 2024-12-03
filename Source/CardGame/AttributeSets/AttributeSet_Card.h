@@ -28,6 +28,6 @@ public:
 	ATTRIBUTE_ACCESSORS(UAttributeSet_Card, HP);
 
   UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    FGameplayAttributeData MaxHP;
-	ATTRIBUTE_ACCESSORS(UAttributeSet_Card, MaxHP);
+    FGameplayAttributeData Attack;
+	ATTRIBUTE_ACCESSORS(UAttributeSet_Card, Attack);
 };

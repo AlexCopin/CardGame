@@ -13,5 +13,7 @@ UCLASS()
 class CARDGAME_API ACardGameGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+public:
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UDataTable> CardList;
 };
