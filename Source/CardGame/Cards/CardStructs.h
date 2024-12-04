@@ -25,32 +25,45 @@ enum EFamily : uint8
 };
 
 USTRUCT(BlueprintType)
-struct FCardStats
+struct FCardStat
 {
 	GENERATED_BODY()
-	FCardStats() {
-		CurrentCost = InitialCost;
-		CurrentAttack = InitialAttack;
-		CurrentHealth = InitialHealth;
-		CurrentTags = InitialTags;
+	FCardStat()
+	{
+		CurrentValue = InitialValue;
 	}
 public:
 	UPROPERTY(EditDefaultsOnly)
-	int InitialCost;
-	UPROPERTY(EditInstanceOnly)
-	int CurrentCost;
+	FGameplayTag StatTag;
 	UPROPERTY(EditDefaultsOnly)
-	int InitialAttack;
-	UPROPERTY(EditInstanceOnly)
-	int CurrentAttack;
+	float CurrentValue;
 	UPROPERTY(EditDefaultsOnly)
-	int InitialHealth;
-	UPROPERTY(EditInstanceOnly)
-	int CurrentHealth;
+	float InitialValue;
+
+	float AddToValue(float Added) { CurrentValue += Added; }
+};
+USTRUCT(BlueprintType)
+struct FCardStats
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditDefaultsOnly)
+	TArray<FCardStat> CardStatsArray;
 	UPROPERTY(EditDefaultsOnly)
 	FGameplayTagContainer InitialTags;
 	UPROPERTY(EditInstanceOnly)
 	FGameplayTagContainer CurrentTags;
+
+	FCardStat& FindCardStat(FGameplayTag CardTag) 
+	{
+		for (auto& cardStat : CardStatsArray)
+		{
+			if (cardStat.StatTag.MatchesTagExact(CardTag))
+			{
+				return cardStat;
+			}
+		}
+	}
 
 };
 USTRUCT(BlueprintType)

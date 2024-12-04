@@ -16,4 +16,9 @@ class CARDGAME_API ACardGameGameModeBase : public AGameModeBase
 public:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UDataTable> CardList;
+
+	UFUNCTION()
+	void UpdateGameStateInfos();
+
+	virtual void BeginPlay() override;
 };

@@ -7,7 +7,7 @@
 #include "Card.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FStatChanged, int, OldValue, int, NewValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatChanged, int, NewValue);
 
 UCLASS()
 class CARDGAME_API ACard : public AActor
@@ -17,7 +17,7 @@ class CARDGAME_API ACard : public AActor
 	ACard();
 public:
 	virtual void BeginPlay() override;
-
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	UFUNCTION(BlueprintCallable)
 	void Init(const FCardData& InitCardData);
 
@@ -26,11 +26,12 @@ public:
 	UPROPERTY(BlueprintAssignable, BlueprintReadWrite)
 	FStatChanged OnAttackChanged;
 
-	UFUNCTION(BlueprintCallable)
-	void AddToAttack(int Added);
-	UFUNCTION(BlueprintCallable)
-	void AddToHealth(int Added);
+	UFUNCTION(Server, Reliable)
+	void Server_AddToStats(FGameplayTag StatTag, int Added);
 
-	UPROPERTY(BlueprintReadOnly) 
+	UPROPERTY(ReplicatedUsing=OnRep_CardData) 
 	FCardData CardData;
+
+	UFUNCTION()
+	virtual void OnRep_CardData();
 };
