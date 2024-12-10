@@ -33,14 +33,14 @@ struct FCardStat
 		CurrentValue = InitialValue;
 	}
 public:
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FGameplayTag StatTag;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float CurrentValue;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float InitialValue;
 
-	float AddToValue(float Added) { CurrentValue += Added; }
+	float AddToValue(float Added) { CurrentValue += Added; return CurrentValue; }
 };
 USTRUCT(BlueprintType)
 struct FCardStats
@@ -54,13 +54,14 @@ public:
 	UPROPERTY(EditInstanceOnly)
 	FGameplayTagContainer CurrentTags;
 
-	FCardStat& FindCardStat(FGameplayTag CardTag) 
+	void FindCardStat(FGameplayTag CardTag, FCardStat& OutCardStat) 
 	{
 		for (auto& cardStat : CardStatsArray)
 		{
 			if (cardStat.StatTag.MatchesTagExact(CardTag))
 			{
-				return cardStat;
+				OutCardStat = cardStat;
+				return;
 			}
 		}
 	}

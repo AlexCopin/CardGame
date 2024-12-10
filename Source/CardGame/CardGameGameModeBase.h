@@ -20,5 +20,8 @@ public:
 	UFUNCTION()
 	void UpdateGameStateInfos();
 
+	UFUNCTION()
+	void PostLogin(APlayerController* PC) override;
+
 	virtual void BeginPlay() override;
 };

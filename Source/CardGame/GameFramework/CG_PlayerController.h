@@ -16,6 +16,8 @@ class CARDGAME_API ACG_PlayerController : public APlayerController
 	GENERATED_BODY()
 public:
 	virtual void BeginPlay() override;
+	void OnRep_PlayerState() override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FName> DeckIds;
@@ -23,7 +25,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<ACardManager> CardManagerClass;
 
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	TObjectPtr<ACardManager> CardManager;
+
+
+	UFUNCTION()
+	void Init();
 
 };
