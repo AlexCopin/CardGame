@@ -29,6 +29,7 @@ public:
 	TObjectPtr<ACardManager> CardManager;
 
 
+
 	UFUNCTION()
 	void Init();
 

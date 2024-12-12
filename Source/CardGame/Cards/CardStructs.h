@@ -54,16 +54,36 @@ public:
 	UPROPERTY(EditInstanceOnly)
 	FGameplayTagContainer CurrentTags;
 
-	void FindCardStat(FGameplayTag CardTag, FCardStat& OutCardStat) 
+	FCardStat* FindCardStat(FGameplayTag CardTag)
 	{
-		for (auto& cardStat : CardStatsArray)
+		/*for (auto& cardStat : CardStatsArray)
 		{
 			if (cardStat.StatTag.MatchesTagExact(CardTag))
 			{
 				OutCardStat = cardStat;
 				return;
 			}
-		}
+		}*/
+		return CardStatsArray.FindByPredicate([&](const FCardStat& item)
+			{
+				return item.StatTag == CardTag;
+			});
+	}
+	void AddCardStat(FGameplayTag CardTag, float Added)
+	{
+		FCardStat* cardTag = CardStatsArray.FindByPredicate([&](const FCardStat& item)
+			{
+				return item.StatTag == CardTag;
+			});
+		cardTag->AddToValue(Added);
+		/*for (auto& cardStat : CardStatsArray)
+		{
+			if (cardStat.StatTag.MatchesTagExact(CardTag))
+			{
+				cardStat.AddToValue(Added);
+				return;
+			}
+		}*/
 	}
 
 };

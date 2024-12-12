@@ -75,5 +75,23 @@ FCardStat ACard::GetCardStatCopy(FGameplayTag StatTag)
 
 void ACard::Server_AddToStats_Implementation(FGameplayTag StatTag, int Added)
 {
-	CardData.Stats.AddCardStat(StatTag, Added);
+	/*FCardStat cardStat;
+	FCardData dataTemp = Card->CardData;
+	TArray<FCardStat> cardStats;
+	for(auto stat : dataTemp.Stats.CardStatsArray)
+	{
+		FCardStat tempStat;
+		if (stat.StatTag.MatchesTagExact(StatTag))
+			tempStat.AddToValue(Added);
+		cardStats.Add(tempStat);
+	}*/
+	FCardStat* cardStat = CardData.Stats.FindCardStat(StatTag);
+	float currentValue = cardStat->CurrentValue;
+	cardStat->AddToValue(Added);
+	UE_LOG(LogTemp, Warning, TEXT("OldCardStat = %f  NewCardStat = %f"), currentValue, cardStat->CurrentValue);
+
+	CardData.Stats.AddCardStat(StatTag, -2);
+	FCardStat* cardStat2 = CardData.Stats.FindCardStat(StatTag);
+	float currentValue2 = cardStat2->CurrentValue;
+	UE_LOG(LogTemp, Warning, TEXT("OldCardStat2 = %f  NewCardStat2 = %f"), currentValue2, cardStat2->CurrentValue);
 }

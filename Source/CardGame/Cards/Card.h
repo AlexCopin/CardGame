@@ -29,24 +29,22 @@ public:
 	/*FStatChanged OnHealthChanged;
 	FStatChanged OnAttackChanged;*/
 
-	UFUNCTION(Server, Reliable)
-	void Server_AddToStats(FGameplayTag StatTag, int Added);
-	UFUNCTION(CallInEditor)
-	void Editor_AddToStats(FGameplayTag StatTag, int Added);
-
 	UPROPERTY(ReplicatedUsing=OnRep_CardData, BlueprintReadOnly) 
 	FCardData CardData;
 
 	UFUNCTION()
 	virtual void OnRep_CardData();
 
-	//TryCalls
-
 	TMap<FGameplayTag, FStatChanged> EventsStatChanged;
 	UFUNCTION(BlueprintCallable)
 	bool BindToStatDelegate(FGameplayTag StatTag, UObject* Listener, FName FunctionName);
 
+	FCardStat* GetCardStat(FGameplayTag StatTag);
+
 	UFUNCTION(BlueprintCallable)
-	FCardStat GetCardStat(FGameplayTag StatTag);
+	FCardStat GetCardStatCopy(FGameplayTag StatTag);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void Server_AddToStats(FGameplayTag StatTag, int Added);
 	//Listener->GetClass()->GetFunction()
 };
