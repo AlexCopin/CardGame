@@ -5,6 +5,9 @@
 
 #include "CardStructs.generated.h"
 
+class ACard;
+
+
 UENUM(BlueprintType)
 enum ERarity : uint8
 {
@@ -22,6 +25,13 @@ enum EFamily : uint8
 	Shade UMETA(DisplayName = "Shade"),
 	Golem UMETA(DisplayName = "Golem"),
 	Arrakoa UMETA(DisplayName = "Arrakoa")
+};
+UENUM(BlueprintType)
+enum EInteractionType : uint8
+{
+	Buff UMETA(DisplayName = "Buff"),
+	Debuff UMETA(DisplayName = "Debuff"),
+	Attack UMETA(DisplayName = "Attack"),
 };
 
 USTRUCT(BlueprintType)
@@ -112,3 +122,31 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	bool Available = true;
 };
+
+USTRUCT(BlueprintType)
+struct FCardInteraction
+{
+	GENERATED_BODY()
+	FCardInteraction() = default;
+	FCardInteraction(uint32 IdInstigator, uint32 IdReceiver, FGameplayTag Tag, EInteractionType InteractionType, float Value)
+		: InstigatorId(IdInstigator), ReceiverId(IdReceiver), StatTag(Tag), Type(InteractionType), Added(Value) {}
+
+
+	uint32 InstigatorId;
+	uint32 ReceiverId;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FGameplayTag StatTag;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TEnumAsByte<EInteractionType> Type;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float Added;
+};
+
+USTRUCT(BlueprintType)
+struct FCardId
+{
+	GENERATED_BODY()
+	uint32 Id;
+	ACard* Card;
+};
+

@@ -3,6 +3,7 @@
 #include "CardStructs.h"
 #include "Kismet/GameplayStatics.h"
 #include <Net/UnrealNetwork.h>
+#include "Kismet/KismetArrayLibrary.h"
 
 ACardManager::ACardManager()
 {
@@ -28,6 +29,33 @@ void ACardManager::OnRep_CardIds()
 	Server_CreateDeck();
 }
 
+void ACardManager::Server_Interact_Implementation(FCardInteraction Interaction)
+{
+	FCardId* cardReceiver = GetWorld()->GetGameState<ACG_GameStateBase>()->Cards.FindByPredicate([&](const FCardId& item)
+		{
+			return item.Id == Interaction.ReceiverId;
+		});
+	cardReceiver->Card->Server_AddToStats(Interaction.StatTag, Interaction.Added);
+	Multicast_Interact(Interaction);
+}
+
+void ACardManager::Multicast_Interact_Implementation(FCardInteraction Interaction)
+{
+	FCardId* cardReceiver = GetWorld()->GetGameState<ACG_GameStateBase>()->Cards.FindByPredicate([&](const FCardId& item)
+		{
+			return item.Id == Interaction.ReceiverId;
+		});
+	switch (Interaction.Type)
+	{
+	case Buff:
+		break;
+	case Debuff:
+		break;
+	case Attack:
+		break;
+	}
+}
+
 
 void ACardManager::Server_CreateDeck_Implementation()
 {
@@ -51,6 +79,10 @@ void ACardManager::Server_CreateDeck_Implementation()
 				auto card = GetWorld()->SpawnActor<ACard>(CardClass, newTransform, params);
 				card->Init(cardData);
 				CardsList.AddUnique(card);
+				FCardId cardId;
+				cardId.Id = card->GetUniqueID();
+				cardId.Card = card;
+				GetWorld()->GetGameState<ACG_GameStateBase>()->Cards.Add(cardId);
 			}
 		}
 	}

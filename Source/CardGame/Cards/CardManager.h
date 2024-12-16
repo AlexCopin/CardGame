@@ -29,4 +29,9 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void Server_CreateDeck();
+
+	UFUNCTION(Server,Reliable)
+	void Server_Interact(FCardInteraction Interaction);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_Interact(FCardInteraction Interaction);
 };

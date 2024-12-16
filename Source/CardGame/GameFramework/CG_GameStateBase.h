@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
+#include <CardGame/Cards/Card.h>
 
 #include "CG_GameStateBase.generated.h"
 
@@ -17,6 +18,8 @@ class CARDGAME_API ACG_GameStateBase : public AGameStateBase
 public:
 	UPROPERTY(Replicated, EditInstanceOnly, BlueprintReadOnly)
 	TObjectPtr<UDataTable> CardList;
+	UPROPERTY(Replicated, EditInstanceOnly, BlueprintReadOnly)
+	TArray<FCardId> Cards;
 
 	UFUNCTION()
 	virtual void BeginPlay() override;
